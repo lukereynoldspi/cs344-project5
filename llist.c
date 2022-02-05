@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
 		perror("Not enough arguments");
 	}
 	
-
 	else {
 		for (int i = 0; i < argc; ++i) {
 			if (strcmp(argv[i],"ih") == 0) {
@@ -18,33 +17,38 @@ int main(int argc, char *argv[])
 				int num = atoi(s);
 
 				struct node *head = NULL;
-    			struct node *n = node_alloc(10);
+    			struct node *n = node_alloc(num);
     			llist_insert_head(&head, n);
 			}
+
 			else if (strcmp(argv[i],"it") == 0) {
 				char *s = argv[i + 1];
 				int num = atoi(s);
 				struct node *head = NULL;
-    			struct node *n = node_alloc(10);
+    			struct node *n = node_alloc(num);
 				llist_insert_tail(&head, n);
 			}
 
 			else if (strcmp(argv[i],"dh") == 0) {
-				llist_delete_head();
+				struct node *head = NULL;
+				llist_delete_head(&head);
 				printf("%s\n", "dh" );
 			}
 
 			else if (strcmp(argv[i],"f") == 0) {
-				llist_free();
+				struct node *head = NULL;
+				llist_free(&head);
 				printf("%s\n", "f" );
 			}
 
 			else if (strcmp(argv[i],"p") == 0) {
-				llist_print();
-				printf("%s\n", "p" );
+				struct node *head = NULL;
+				llist_print(head);
 			}
 		}
 	}
+
+	return 0;
 }
 
 
@@ -61,17 +65,31 @@ struct node *llist_delete_head(struct node **head) {
 }
 
 void llist_print(struct node *head) {
-
+	if (head == NULL){
+		printf("%s", "[empty]");
+	}
+	while (head)
+    {
+        printf("%d->", head->value);
+        head = head->next;
+    }
 }
 
 void llist_free(struct node **head){
-
+	while (head){
+		free(*head);
+	}
 }
 
 struct node *node_alloc(int value) {
+	
+	struct node *node = (struct node*)malloc(sizeof(struct node));
+    node->value = value;
+    node->next = NULL;
+	return node;
 
 }
 
 void node_free(struct node *n) {
-
+	free(n);
 }
