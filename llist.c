@@ -27,19 +27,16 @@ int main(int argc, char *argv[])
 			else if (strcmp(argv[i],"it") == 0) {
 				char *s = argv[i + 1];
 				int num = atoi(s);
-				struct node *head = NULL;
+
     			struct node *n = node_alloc(num);
 				llist_insert_tail(&head, n);
 			}
 
 			else if (strcmp(argv[i],"dh") == 0) {
-				struct node *head = NULL;
 				llist_delete_head(&head);
-				printf("%s\n", "dh" );
 			}
 
 			else if (strcmp(argv[i],"f") == 0) {
-				struct node *head = NULL;
 				llist_free(&head);
 				printf("%s\n", "f" );
 			}
@@ -61,15 +58,28 @@ void llist_insert_head(struct node **head, struct node *n) {
 
 void llist_insert_tail(struct node **head, struct node *n) {
 
+	struct node *temp = *head;
+	while (temp->next != NULL) {
+		temp = temp->next;
+	}
+	
+	temp->next = n;
+	n->next = NULL;
 }
 
 struct node *llist_delete_head(struct node **head) {
-
+	if (*head != NULL) {
+		struct node *temp = *head;
+		*head = temp->next;
+	}
 }
 
 void llist_print(struct node *head) {
 
 	printf("\n");
+	if (head == NULL) {
+		printf("[empty]");
+	}
 	while (head)
     {
 		if (head->next != NULL) {
