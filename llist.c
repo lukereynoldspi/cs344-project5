@@ -38,7 +38,6 @@ int main(int argc, char *argv[])
 
 			else if (strcmp(argv[i],"f") == 0) {
 				llist_free(&head);
-				printf("%s\n", "f" );
 			}
 			
 			else if (strcmp(argv[i],"p") == 0) {
@@ -59,11 +58,15 @@ void llist_insert_head(struct node **head, struct node *n) {
 void llist_insert_tail(struct node **head, struct node *n) {
 
 	struct node *temp = *head;
-	while (temp->next != NULL) {
-		temp = temp->next;
+	if (temp == NULL) {
+		*head = n;
 	}
-	
-	temp->next = n;
+	else {
+		while (temp->next != NULL) {
+			temp = temp->next;
+		}	
+		temp->next = n;
+	}
 	n->next = NULL;
 }
 
@@ -94,8 +97,10 @@ void llist_print(struct node *head) {
 }
 
 void llist_free(struct node **head){
-	while (head){
-		free(*head);
+	while (*head != NULL) {
+		struct node *temp = *head;
+		*head = temp->next;
+		node_free(temp);
 	}
 }
 
