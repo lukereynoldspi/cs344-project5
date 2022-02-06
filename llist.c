@@ -11,12 +11,15 @@ int main(int argc, char *argv[])
 	}
 	
 	else {
+
+		struct node *head = NULL;
+
 		for (int i = 0; i < argc; ++i) {
+
 			if (strcmp(argv[i],"ih") == 0) {
 				char *s = argv[i + 1];
 				int num = atoi(s);
 
-				struct node *head = NULL;
     			struct node *n = node_alloc(num);
     			llist_insert_head(&head, n);
 			}
@@ -40,9 +43,8 @@ int main(int argc, char *argv[])
 				llist_free(&head);
 				printf("%s\n", "f" );
 			}
-
+			
 			else if (strcmp(argv[i],"p") == 0) {
-				struct node *head = NULL;
 				llist_print(head);
 			}
 		}
@@ -53,7 +55,8 @@ int main(int argc, char *argv[])
 
 
 void llist_insert_head(struct node **head, struct node *n) {
-
+	n->next = *head;
+	*head = n;
 }
 
 void llist_insert_tail(struct node **head, struct node *n) {
@@ -65,14 +68,19 @@ struct node *llist_delete_head(struct node **head) {
 }
 
 void llist_print(struct node *head) {
-	if (head == NULL){
-		printf("%s", "[empty]");
-	}
+
+	printf("\n");
 	while (head)
     {
-        printf("%d->", head->value);
+		if (head->next != NULL) {
+			printf("%d -> ", head->value);
+		}
+		else {
+			printf("%d", head->value);
+		}
         head = head->next;
     }
+	printf("\n");
 }
 
 void llist_free(struct node **head){
@@ -83,7 +91,7 @@ void llist_free(struct node **head){
 
 struct node *node_alloc(int value) {
 	
-	struct node *node = (struct node*)malloc(sizeof(struct node));
+	struct node *node = malloc(sizeof(struct node));
     node->value = value;
     node->next = NULL;
 	return node;
